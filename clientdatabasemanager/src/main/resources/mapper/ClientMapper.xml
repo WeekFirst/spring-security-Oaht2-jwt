@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mca.client.manager.dao.ClientDao">
+
+    <select id="getClients" resultType="com.mca.client.manager.entity.ClientDetails" parameterType="com.mca.client.manager.entity.ClientSelectPage">
+        SELECT
+        client_id ,
+        resource_ids ,
+        client_secret ,
+        scope ,
+        authorized_grant_types ,
+        web_server_redirect_uri ,
+        authorities ,
+        additional_information ,
+        autoapprove ,
+        access_token_validity ,
+        refresh_token_validity
+        FROM
+        oauth_client_details
+        <if test="information != null and information != ''">
+        WHERE
+              additional_information LIKE CONCAT('%' #{information , jdbcType=VARCHAR} , '%')
+        </if>
+        LIMIT #{pageNo} , #{pageSize}
+    </select>
+
+    <select id="getTotal" resultType="Integer">
+        SELECT
+            count(1)
+        FROM
+            oauth_client_details
+    </select>
+
+    <select id="selectOne" resultType="com.mca.client.manager.entity.ClientDetails" parameterType="string">
+        SELECT
+            client_id ,
+            resource_ids ,
+            client_secret ,
+            scope ,
+            authorized_grant_types ,
+            web_server_redirect_uri ,
+            authorities ,
+            additional_information ,
+            autoapprove ,
+            access_token_validity ,
+            refresh_token_validity
+        FROM
+            oauth_client_details
+        WHERE
+            client_id = #{clientID}
+    </select>
+
+    <update id="updateClient" parameterType="com.mca.client.manager.entity.ClientDetails" >
+        UPDATE
+            oauth_client_details
+        SET
+            resource_ids = #{resourceIDs},
+            client_secret = #{clientSecret},
+            scope = #{scope},
+            authorized_grant_types = #{authorizedGrantTypes},
+            web_server_redirect_uri = #{webServerRedirectUri},
+            authorities = #{authorities},
+            additional_information = #{additionalInformation},
+            autoapprove = #{autoapprove},
+            access_token_validity = #{accessTokenValidity},
+            refresh_token_validity = #{refreshTokenValidity}
+        WHERE
+            client_id = #{clientID}
+    </update>
+
+    <delete id="deleteByClientID" parameterType="string">
+        DELETE
+        FROM
+            oauth_client_details
+        WHERE
+            client_id = #{clientID}
+    </delete>
+
+</mapper>

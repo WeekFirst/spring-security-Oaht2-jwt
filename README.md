@@ -51,3 +51,9 @@ code           varchar(256) null comment '授权码(未加密)',
 authentication blob         null comment 'AuthorizationRequestHolder.java对象序列化后的二进制数据'
 )
 comment '授权码' charset = utf8;
+
+
+
+集成swagger 的时候
+在swagger的认证页面添加token的时候 前边加上 Bearer 
+![img_3.png](img_3.png)
