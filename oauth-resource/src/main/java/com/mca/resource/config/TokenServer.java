@@ -1,0 +1,58 @@
+package com.mca.resource.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.provider.token.*;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+/**
+ * @Author an Stark
+ * @ClassName TokenServer
+ * @Description 令牌服务配置
+ * @date 2021/6/24 下午1:58
+ * @Version 1.0
+ */
+@Configuration
+public class TokenServer {
+
+    private String SIGNING_KEY = "server121";
+
+
+    @Bean
+    public TokenStore tokenStore() {
+        //使用jwt存储方案
+        return new JwtTokenStore(accessTokenConverter());
+    }
+
+    /**
+     * jwt 配置
+     * @return
+     */
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter(){
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setSigningKey(SIGNING_KEY);
+        return converter;
+    }
+
+
+    /**
+     * 服务器远程校验token 不使用
+     * @return
+     */
+    @Bean
+    public ResourceServerTokenServices tokenServices() {
+        RemoteTokenServices services = new RemoteTokenServices();
+        services.setCheckTokenEndpointUrl("http://localhost:9001/server/oauth/check_token");
+        services.setClientId("client");
+        services.setClientSecret("123456");
+        return services;
+    }
+
+
+
+
+
+
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mca.server.dao.UserLoginDao">
+
+    <select id="getTotalSize" resultType="Integer">
+        SELECT
+            count(1)
+        FROM
+            simple_user
+        WHERE
+        <![CDATA[status != -1]]>
+    </select>
+
+    <select id="getUserByName" resultType="com.mca.server.entity.UserInfoDTO">
+        SELECT
+            id,
+            user_name,
+            user_password,
+            user_authorities,
+            user_nick,
+            user_img
+        FROM
+            simple_user
+        WHERE
+            user_status = 0
+          AND
+            user_name = #{username}
+    </select>
+
+</mapper>
