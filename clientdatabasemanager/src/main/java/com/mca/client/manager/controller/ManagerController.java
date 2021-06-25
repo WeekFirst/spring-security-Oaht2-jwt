@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -47,7 +48,7 @@ public class ManagerController {
         }
     }
 
-    @ApiOperation(notes = "获取详情" , value = "clientID")
+    @ApiOperation(notes = "获取详情", value = "clientID")
     @GetMapping(value = "/client")
     public Result getClient(@RequestParam("clientID") String clientID) {
         try {

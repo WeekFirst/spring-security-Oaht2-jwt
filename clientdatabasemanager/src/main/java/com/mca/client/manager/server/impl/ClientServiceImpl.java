@@ -1,5 +1,6 @@
 package com.mca.client.manager.server.impl;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.mca.client.manager.dao.ClientDao;
 import com.mca.client.manager.entity.ClientDetails;
 import com.mca.client.manager.entity.ClientSelectPage;
@@ -8,6 +9,7 @@ import com.mca.client.manager.util.RCode;
 import com.mca.client.manager.util.ServiceResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -32,6 +34,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private ClientDao clientDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public ServiceResult<Map<String, Object>> getClients(ClientSelectPage page) {
@@ -71,6 +76,8 @@ public class ClientServiceImpl implements ClientService {
     public ServiceResult<Boolean> addClient(ClientDetails client) {
         try {
             ClientDetails clientDetails = clientDao.selectOne(client.getClientID());
+            client.setAdditionalInformation("{'information':"+ client.getAdditionalInformation() + "}");
+            client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
             if(ObjectUtils.isEmpty(clientDetails)){
                 if ((clientDao.insert(client)) != 0) {
                     return ServiceResult.createSuccess(true, RCode.SUCCESS);
@@ -91,6 +98,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ServiceResult<Boolean> updateClient(ClientDetails client) {
         try {
+            client.setAdditionalInformation("{'information':"+ client.getAdditionalInformation() + "}");
+            client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
             if ((clientDao.updateClient(client)) != 0) {
                 return ServiceResult.createSuccess(true, RCode.SUCCESS);
             }else{

@@ -6,6 +6,7 @@
     <modules>
         <module>oauth-resource</module>
         <module>oauth-server</module>
+        <module>clientdatabasemanager</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

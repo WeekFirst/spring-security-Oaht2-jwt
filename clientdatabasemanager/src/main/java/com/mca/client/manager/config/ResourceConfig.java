@@ -1,5 +1,7 @@
 package com.mca.client.manager.config;
 
+import com.mca.client.manager.handler.MyAccessDeniedHandler;
+import com.mca.client.manager.handler.MyAuthenticationEnterPointHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -68,7 +70,16 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                 .anyRequest()
                 .permitAll()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                //自定义异常
+                .exceptionHandling()
+                .accessDeniedHandler(new MyAccessDeniedHandler())
+                .authenticationEntryPoint(new MyAuthenticationEnterPointHandler())
+
+
+        ;
+
     }
 
 }
